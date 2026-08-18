@@ -1,0 +1,38 @@
+import java.util.List;
+import java.util.ArrayList;
+
+class reverse_word_LC {
+    public static String reverse_word(String s) {
+        // reverse the order of the words in a sentence
+        String[] a = s.split(" ");
+        List<String> t = new ArrayList<>();
+        for (String w: a) {
+            System.out.println(w.equals(" "));
+            if (w == " ") {
+                System.out.println("continue");
+                continue;
+            }
+            System.out.println("added");
+            t.add(w.trim());
+        }
+        int start = 0;
+        int end = t.size() - 1;
+
+        while (start < end) {
+            String temp = t.get(start);
+            t.set(start, t.get(end));
+            t.set(end, temp);
+            start++;
+            end--;
+        }
+        System.out.println(t);
+
+        String res = String.join(" ", t);
+        return res;
+    }
+    public static void main(String[] args) {
+        System.out.println("hello");
+        String r = reverse_word("a good   example");
+        System.out.println(r);
+    }
+}
