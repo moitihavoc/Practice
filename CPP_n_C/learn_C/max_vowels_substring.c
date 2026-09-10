@@ -1,53 +1,40 @@
+#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <uchar.h>
+
+bool isVowels(char c) { return c == 'a' || c == 'i' || c == 'e' || c == 'u' || c == 'o'; }
 
 int maxVowels(char *s, int k) {
     // return the max number of vowels in any substring of length k in string s
-    char *curr;
-    curr = (char *)malloc(k * s[0]);
-    int max = 0;
-    int n = 0; // string length
-    int *pn = &n;
+    // initiate initial substring
+    // count the current number of vowels
+    // let that be the current max
+    // starting from kth letter, remove the (i-k)th letter and add the kth letter to the last
+    // count vowels, comp with max.
+    int curr_num = 0;
+    // int i = 0;
 
-    while (*s != '\0') {
-        *pn++;
+    for (int i = 0; i < k; i++) {
+        if (isVowels(s[i]))
+            curr_num++;
     }
 
-    // initiate current substring
-    int i;
-    for (i = 0; i < k; i++) {
-        curr[i] = s[i];
-        if (curr[i] == 'a' || curr[i] == 'i' || curr[i] == 'u' || curr[i] == 'e' || curr[i] == 'o')
-            max++;
+    int max_num = curr_num;
+
+    for (int i = k; s[i] != '\0'; i++) {
+        if (isVowels(s[i - k]))
+            curr_num--;
+        if (isVowels(s[i]))
+            curr_num++;
+        max_num = max_num > curr_num ? max_num : curr_num;
     }
 
-    // check every substring
-    for (i = k; i < n; i++) {
-        int curr_num = 0;
-        for (i = 0; i < k; i++) {
-            if (i == k - 1) {
-                curr[i] = s[k];
-                if (curr[i] == 'a' || curr[i] == 'i' || curr[i] == 'u' || curr[i] == 'e' ||
-                    curr[i] == 'o')
-                    curr_num++;
-                break;
-            }
-            curr[i] = curr[i + 1];
-            if (curr[i] == 'a' || curr[i] == 'i' || curr[i] == 'u' || curr[i] == 'e' ||
-                curr[i] == 'o')
-                curr_num++;
-        }
-        max = max > curr_num ? max : curr_num;
-    }
-
-    return max;
+    return max_num;
 }
 
 int main(void) {
     char s[] = "leetcode";
     int k = 3;
     int res = maxVowels(s, k);
-    printf("max num of vowels in the word %s is %d", s, res);
+    printf("max num of vowels in the word %s is %d\n", s, res);
     return 0;
 }
