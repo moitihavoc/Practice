@@ -1,0 +1,50 @@
+#include <iostream>
+#include <numeric>
+#include <stack>
+#include <vector>
+using namespace std;
+
+vector<int> solution(vector<int> &asteroids) {
+    // integers represent asteroids and their directions
+    // opposite signs collide while same signs never meet
+    // return the final status of the asteroids in a vector
+    stack<int> st;
+
+    for (int i = 0; i < asteroids.size(); i++) {
+        if (st.empty() || (st.top() < 0 && asteroids[i] > 0) || st.top() * asteroids[i] > 0) {
+            st.push(asteroids[i]);
+            continue;
+        }
+        while (!st.empty() && st.top() > 0 && asteroids[i] < 0) {
+            if ((st.top() + asteroids[i]) > 0)
+                break;
+            else if ((st.top() + asteroids[i]) < 0) {
+                st.pop();
+                if (st.empty() || st.top() < 0)
+                    st.push(asteroids[i]);
+            } else {
+                st.pop();
+                break;
+            }
+        }
+    }
+    vector<int> res(st.size());
+
+    for (int i = st.size() - 1; i >= 0; i--) {
+        res[i] = st.top();
+        st.pop();
+    }
+
+    return res;
+}
+
+int main() {
+    vector<int> as = {3, 5, -6, 2, -1, 4};
+    vector<int> res = solution(as);
+    cout << "The result is\n";
+    for (int i = 0; i < res.size(); i++) {
+        cout << res[i] << " ";
+    }
+    cout << "\n";
+    return 0;
+}
